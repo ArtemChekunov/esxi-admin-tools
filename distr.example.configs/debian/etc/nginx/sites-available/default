@@ -1,0 +1,22 @@
+upstream bcgi {
+    server unix:///var/run/uwsgi/app/bash-cgi/socket;
+}
+
+server {
+	listen 80;
+rewrite   ^/$   /esxi-mon.cgi;
+
+location /data {
+	alias /home/scorpius/develop/esxi-admin-tools/esxi-mon/www/;
+	autoindex on;
+	allow all; 
+}
+
+location / {
+     include /etc/nginx/uwsgi_params;
+     uwsgi_param REDIRECT_STATUS 200;
+     uwsgi_modifier1 9;
+     uwsgi_pass bcgi;
+}
+
+}

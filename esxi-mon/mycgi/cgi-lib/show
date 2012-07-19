@@ -1,0 +1,66 @@
+_show_all_vms_on_esxi(){
+
+echo "Updating was done: $(cat ${_TMP}/$HOST/update_date)"
+#echo "<table border="1">"
+echo "
+<script type=\"text/javascript\">
+\$(document).ready(function(){
+    \$('table').tablesorter();
+});
+</script>
+<div class=\"row-fluid\">
+<div class=\"span12\">
+    <table class=\"table table-striped table-bordered table-condensed tablesorter\">
+          <thead>"
+
+#<tr>
+#<td>aaa</td>
+#<td>bbb</td>
+#</tr>
+#<tr>
+#<td>ccc</td>
+#<td>ddd</td>
+#</tr>
+
+#HOST=esxi1
+#cat "$HOST".allvms
+#for _FILE in $(find ./$HOST -type f -name "*.log")
+
+_CURRENT_ESXi="${_TMP}/$HOST"
+
+echo "<tr class=\"tablesorter-header\">    <th><b>VMid</b></th>    <th><b>VMname</b></th>    <th><b>VM_Status</b></th>    <th><b>VM_HostName</b></th>    <th><b>VM_IP_Adreses</b></th>    </tr></thead><tbody>"
+while read _LINE 
+    do
+#        echo -e "$_LINE"
+        _VMid=`echo $_LINE | awk '{ printf $1 }'`
+#        echo _VMid $_VMid
+        echo "<tr>"
+            echo "<td>"; echo $_LINE | awk '{ printf $1 }' ;echo "</td>"        
+            echo "<td>"; echo $_LINE | awk '{ printf $2 }' ;echo "</td>"        
+            #echo "<td>"; cat $HOST/"$_VMid".log | grep guestState | gawk -F'guestState = "' '{ printf $2 }' | gawk -F'",' '{ printf $1 }' ;echo "</td>"        
+            _GuestState=$(cat ${_CURRENT_ESXi}/"$_VMid".log | grep guestState | gawk -F'guestState = "' '{ printf $2 }' | gawk -F'",' '{ printf $1 }')
+                if [ ${_GuestState} == running ]
+                    then
+                        #echo "<td> ${_GuestState} </td>"
+                        #echo "<td><font face="verdana" color="green"> ${_GuestState}</font></td>"
+                        echo "<td><font color="green"> ${_GuestState}</font></td>"
+                    else
+                        echo "<td><font color="red">${_GuestState}</font></td>"
+                fi
+            echo "<td>"; cat ${_CURRENT_ESXi}/"$_VMid".log | grep hostName | head -1 | gawk -F'hostName = "' '{ printf $2 }' | gawk -F'",' '{ printf $1 }' ;echo "</td>"        
+            echo "<td>"; cat ${_CURRENT_ESXi}/"$_VMid".log | tr "\n" " " 2>&1 | gawk -F"vim.vm.GuestInfo.NicInfo" '{ print $3 }' | gawk -F"[" '{ print $2 }' | gawk -F"]" '{ print $1 }' ;echo "</td>"        
+#            echo "<td>";  echo c ;echo "</td>"        
+        echo "</tr>"
+    done < ${_CURRENT_ESXi}/$HOST.allvms
+
+
+#echo "</table>"
+echo "
+
+      </tbody>
+          </table>
+            </div>
+            </div>
+            "
+
+}

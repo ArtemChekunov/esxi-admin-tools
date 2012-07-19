@@ -1,0 +1,116 @@
+# Varibles
+#
+_TMP="../../tmp"
+HOST=""
+
+# Function
+_header(){
+echo -e "Content-type: text/html\n"
+
+# read in our parameters
+CMD=`echo "$QUERY_STRING" | sed -n 's/^.*cmd=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
+FOLDER=`echo "$QUERY_STRING" | sed -n 's/^.*folder=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"| sed "s/%2F/\//g"`
+HOST=`echo "$QUERY_STRING" | sed -n 's/^.*host=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"| sed "s/%2F/\//g"`
+UPDATE=`echo "$QUERY_STRING" | sed -n 's/^.*update=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"| sed "s/%2F/\//g"`
+
+
+
+
+# our html header
+echo "<html>"
+echo "<head><title>ESXi Monitor</title>
+    <link href="/data/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/data/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="/data/bootstrap/css/style.css" rel="stylesheet" />
+    <script src="/data/bootstrap/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/data/bootstrap/js/jquery.tablesorter.js" type="text/javascript"></script>
+
+</head>"
+echo "<body><div class=\"container-fluid\">"
+}
+
+_footer(){
+echo "</div></body>"
+echo "</html>"
+}
+
+
+_menu(){
+#    echo "<br>"
+#    echo "<center>"
+echo "<div class=\"row-fluid\">"
+echo "<div class=\"span12 page-header\">"
+     
+
+        if   [[ -z $HOST ]]
+            then
+          #      echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
+#pwd
+for f in $(ls ../../configs/*.conf); do 
+#    echo $f
+#    echo aaa
+    _ESXIX=$(basename $f| sed -e 's#.conf##g')
+    echo -n "<a class=\"btn\" href=esxi-mon.cgi?host="
+    echo -n ${_ESXIX}
+    echo -n "&cmd=_show_all_vms_on_esxi>"
+    echo -n ${_ESXIX}
+    echo "</a>"
+
+done 2>&1
+
+            else
+                echo "<a class=\"btn btn-inverse\" href="esxi-mon.cgi?host=$HOST\&cmd=_update_esxi">Update</a>"
+
+                for f in $(ls ../../configs/*.conf); do 
+
+                    _ESXIX=$(basename $f| sed -e 's#.conf##g')
+                    if [[ $HOST == ${_ESXIX} ]]
+                        then
+                            echo -n "<a class=\"btn btn-success\" href=esxi-mon.cgi?host="
+                        else
+                            echo -n "<a class=\"btn\" href=esxi-mon.cgi?host="
+                        fi
+
+                    echo -n ${_ESXIX}
+                    echo -n "&cmd=_show_all_vms_on_esxi>"
+                    echo -n ${_ESXIX}
+                    echo "</a>"
+#                
+                done 2>&1
+
+#                fi
+
+#        if [[ $HOST == esxi1 ]] 
+#           then 
+#                echo "<a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
+#        fi
+#
+#        if [[ $HOST == esxi2 ]] 
+#           then 
+#                echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
+#        fi
+#
+#        if [[ $HOST == esxi3 ]] 
+#           then 
+#                echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
+        fi
+echo "</div>"
+echo "</div>"
+#    echo "</center>"
+#echo "<pre>"
+#env
+#echo "</pre>"
+}
+
+function test_dir(){
+    if [ ! -d ${1} ]
+        then
+            mkdir -p ${1}
+    fi
+
+    if [ ! -w ${1} ]
+        then
+            echo -e "Directory ${1} is not writable"
+            exit 1
+    fi
+}

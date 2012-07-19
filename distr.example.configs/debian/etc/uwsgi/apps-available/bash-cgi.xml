@@ -1,0 +1,8 @@
+<uwsgi>
+    <plugin-dir>/usr/lib/uwsgi/plugins</plugin-dir>
+    <plugins>cgi</plugins>
+    <cgi>/home/scorpius/develop/esxi-admin-tools/esxi-mon/mycgi</cgi>
+    <cgi-allowed-ext>.cgi</cgi-allowed-ext>
+    <cgi-allowed-ext>.sh</cgi-allowed-ext>
+    <cgi-allowed-ext>.bash</cgi-allowed-ext>
+</uwsgi>

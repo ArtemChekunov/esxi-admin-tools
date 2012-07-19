@@ -1,0 +1,76 @@
+function _update_esxi(){
+source ../../configs/${HOST}.conf
+    echo "Output of _update_esxi :<pre>"
+#    echo ZZZZZZZZZZZZ
+#_ssh="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -x -i ../.ssh/id_rsa_esxi"
+_ssh="ssh -o PasswordAuthentication=no -x -i ${_ESXI_KEY}"
+echo "Start update"
+#pwd
+
+#    if [[ $HOST == esxi1 ]] 
+#        then 
+#            _connect="$_ssh root@192.168.9.5"
+#    fi
+#    
+#    if [[ $HOST == esxi2 ]] 
+#        then 
+#            _connect="$_ssh root@192.168.9.25"
+#    fi
+#    
+#    if [[ $HOST == esxi3 ]] 
+#        then 
+#            _connect="$_ssh root@192.168.9.10"
+#    fi
+    
+    _connect="$_ssh ${_ESXI_USER}@${_ESXI_HOST}"
+    _esxi="$_connect vim-cmd" 
+    
+#   echo aaaaaaaaa
+#   ssh -o PasswordAuthentication=no -x -i ../.ssh/id_rsa_esxi root@192.168.9.5 id
+#   echo aaaaaaaaa
+#   id
+#   $_esxi vmsvc/getallvms
+#   echo "/usr/bin/$_esxi vmsvc/get.guest 176"
+#   /usr/bin/$_esxi -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -x -v vmsvc/get.guest 176 2>&1
+#   echo OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+#   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -x -i ../.ssh/id_rsa_esxi root@192.168.9.5 vim-cmd vmsvc/get.guest 176
+#   echo OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    
+
+#            echo $_connect id 2>&1 
+#            $_connect id 2>&1 
+#            $_esxi > connect.$HOST.log 2>&1
+#
+            test_dir ${_TMP}/$HOST
+            $_connect id > ${_TMP}/$HOST/$HOST.connect_log 2>&1
+            if [[ $? -ne 0 ]]
+                then
+                    cat ${_TMP}/$HOST/$HOST.connect_log
+                    echo "Update Error"
+                    echo "</pre>"
+                    _footer
+                    exit 1
+            fi
+
+
+            date > ${_TMP}/$HOST/update_date
+            $_esxi vmsvc/getallvms | grep -v Vmid  > ${_TMP}/$HOST/$HOST.allvms
+
+    for _VM in `$_esxi vmsvc/getallvms | egrep -v 'Vmid' | awk '{ printf $1" " }'`
+        do 
+#            echo test_dir $HOST
+            echo "Get VM $_VM ..."
+            $_esxi vmsvc/get.guest $_VM > ${_TMP}/$HOST/$_VM.log
+
+            if [[ $? -eq 0 ]]
+                then
+                    echo "Get $_VM Success"
+                else
+                    echo "Get $_VM Filed"
+            fi
+
+        done
+    
+    echo "Update Complete"
+echo "</pre>"
+}

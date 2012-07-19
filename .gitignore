@@ -1,6 +1,11 @@
 .ssh/*
+.ssh_/*
 !.ssh/README
 
 configs/*
 !configs/README
 !configs/esxi00.conf.example
+
+
+tmp/*
+!tmp/README
