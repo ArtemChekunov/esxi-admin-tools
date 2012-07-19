@@ -1,2 +1,6 @@
 .ssh/*
 !.ssh/README
+
+configs/*
+!configs/README
+!configs/esxi00.conf.example
