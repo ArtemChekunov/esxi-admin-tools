@@ -54,7 +54,9 @@ echo "Start update"
 
 
             date > ${_TMP}/$HOST/update_date
-            $_esxi vmsvc/getallvms | grep -v Vmid  > ${_TMP}/$HOST/$HOST.allvms
+            $_esxi vmsvc/getallvms | grep vmx  > ${_TMP}/$HOST/$HOST.allvms
+            #$_esxi vmsvc/getallvms | grep -v Vmid  > ${_TMP}/$HOST/$HOST.allvms
+            #sed -i -n '/vmx/p'
 
     for _VM in `$_esxi vmsvc/getallvms | egrep -v 'Vmid' | awk '{ printf $1" " }'`
         do 
