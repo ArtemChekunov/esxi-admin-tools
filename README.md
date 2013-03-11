@@ -5,7 +5,7 @@ Repository with collection tools for VMware ESX/ESXi
 
 # How to install ESXi Monitoro on Debian wheezy
 
-sudo apt-get install nginx uwsgi uwsgi-plugin-cgi -y
+sudo apt-get install nginx uwsgi uwsgi-plugin-cgi gawk sed -y
 
 git clone git://github.com/sc0rp1us/esxi-admin-tools.git esxi-admin-tools
 
