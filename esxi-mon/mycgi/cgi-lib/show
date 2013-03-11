@@ -28,7 +28,7 @@ echo "
 
 _CURRENT_ESXi="${_TMP}/$HOST"
 
-echo "<tr class=\"tablesorter-header\">    <th><b>VMid</b></th>    <th><b>VMname</b></th>    <th><b>VM_Status</b></th>    <th><b>VM_HostName</b></th>    <th><b>VM_IP_Adreses</b></th>    </tr></thead><tbody>"
+echo "<tr class=\"tablesorter-header\">    <th><b>VMid</b></th>    <th><b>VMname</b></th>    <th><b>VM_Status</b></th>    <th><b>VM_HostName</b></th>    <th><b>VM_IP_Adreses</b></th>  <th><b>VM_MAC_Adreses</b></th>  </tr></thead><tbody>"
 while read _LINE 
     do
 #        echo -e "$_LINE"
@@ -49,6 +49,7 @@ while read _LINE
                 fi
             echo "<td>"; cat ${_CURRENT_ESXi}/"$_VMid".log | grep hostName | head -1 | gawk -F'hostName = "' '{ printf $2 }' | gawk -F'",' '{ printf $1 }' ;echo "</td>"        
             echo "<td>"; cat ${_CURRENT_ESXi}/"$_VMid".log | tr "\n" " " 2>&1 | gawk -F"vim.vm.GuestInfo.NicInfo" '{ print $3 }' | gawk -F"[" '{ print $2 }' | gawk -F"]" '{ print $1 }' ;echo "</td>"        
+            echo "<td>"; cat ${_CURRENT_ESXi}/"$_VMid".log | grep macAddress | gawk '{printf $3" "}' | tr ',' ' ' ;echo "</td>"        
 #            echo "<td>";  echo c ;echo "</td>"        
         echo "</tr>"
     done < ${_CURRENT_ESXi}/$HOST.allvms
