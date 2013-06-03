@@ -4,7 +4,7 @@
 
 configs/*
 !configs/README
-!configs/esxi00.conf.example
+!configs/*.example
 
 
 tmp/*

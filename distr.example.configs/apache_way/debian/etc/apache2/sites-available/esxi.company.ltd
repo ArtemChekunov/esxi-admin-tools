@@ -1,0 +1,31 @@
+<VirtualHost esxi.company.ltd:80>
+    ServerName esxi.company.ltd
+	ServerAdmin admin@company.ltd
+
+	DocumentRoot /opt/esxi-admin-tools/esxi-mon/www
+
+    RedirectMatch ^/$ /cgi-bin/esxi-mon.cgi
+
+    Alias /data /opt/esxi-admin-tools/esxi-mon/www
+    <Directory /opt/esxi-admin-tools/esxi-mon/www>
+    Order allow,deny
+    Allow from all
+    </Directory>
+
+
+	ScriptAlias /cgi-bin/ /opt/esxi-admin-tools/esxi-mon/mycgi/
+	<Directory "/opt/esxi-admin-tools/esxi-mon/mycgi">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/esxi.company.ltd-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/esxi.company.ltd-access.log combined
+</VirtualHost>

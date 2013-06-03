@@ -1,3 +1,4 @@
+#!/bin/bash
 # Varibles
 #
 _TMP="../../tmp"
@@ -36,19 +37,13 @@ echo "</html>"
 
 
 _menu(){
-#    echo "<br>"
-#    echo "<center>"
 echo "<div class=\"row-fluid\">"
 echo "<div class=\"span12 page-header\">"
      
 
         if   [[ -z $HOST ]]
             then
-          #      echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
-#pwd
 for f in $(ls ../../configs/*.conf); do 
-#    echo $f
-#    echo aaa
     _ESXIX=$(basename $f| sed -e 's#.conf##g')
     echo -n "<a class=\"btn\" href=esxi-mon.cgi?host="
     echo -n ${_ESXIX}
@@ -75,31 +70,12 @@ done 2>&1
                     echo -n "&cmd=_show_all_vms_on_esxi>"
                     echo -n ${_ESXIX}
                     echo "</a>"
-#                
+                
                 done 2>&1
 
-#                fi
-
-#        if [[ $HOST == esxi1 ]] 
-#           then 
-#                echo "<a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
-#        fi
-#
-#        if [[ $HOST == esxi2 ]] 
-#           then 
-#                echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
-#        fi
-#
-#        if [[ $HOST == esxi3 ]] 
-#           then 
-#                echo "<a class=\"btn\" href="esxi-mon.cgi?host=esxi1\&cmd=_show_all_vms_on_esxi">esxi1</a> <a class=\"btn\" href="esxi-mon.cgi?host=esxi2\&cmd=_show_all_vms_on_esxi">esxi2</a> <a class=\"btn btn-success\" href="esxi-mon.cgi?host=esxi3\&cmd=_show_all_vms_on_esxi">esxi3</a><br>"
         fi
 echo "</div>"
 echo "</div>"
-#    echo "</center>"
-#echo "<pre>"
-#env
-#echo "</pre>"
 }
 
 function test_dir(){
